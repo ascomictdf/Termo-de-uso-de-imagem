@@ -1,5 +1,3 @@
-'use client';
-
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { jsPDF } from 'jspdf';
 import {
@@ -176,7 +174,7 @@ function buildFileName(name: string) {
   return `termo-cessao-uso-imagem-nome-voz-ictdf-${normalizedName || 'participante'}-${date}.pdf`;
 }
 
-export default function Home() {
+export default function App() {
   const [form, setForm] = useState<FormData>(initialForm);
   const [accepted, setAccepted] = useState(false);
   const [hasSignature, setHasSignature] = useState(false);
