@@ -447,7 +447,7 @@ export default function App() {
   // Envia o PDF como anexo pelo FormSubmit. O upload de arquivos exige um
   // formulário multipart real, então o envio é feito para um iframe oculto
   // para que a página não seja redirecionada.
-  function sendByEmail(pdfBlob: Blob, fileName: string, acceptedAt: Date) {
+  function sendByEmail(pdfBlob: Blob, fileName: string) {
     return new Promise<void>((resolve, reject) => {
       const frameName = `formsubmit-${Date.now()}`;
       const iframe = document.createElement('iframe');
@@ -461,19 +461,12 @@ export default function App() {
       formElement.target = frameName;
       formElement.style.display = 'none';
 
+      // Envia apenas o PDF assinado; os dados do participante já constam nele.
       const fields: Record<string, string> = {
-        _subject: `Termo de cessão de uso de imagem, nome e voz assinado - ${form.name}`,
-        _template: 'table',
+        _subject: 'Termo de cessão de uso de imagem, nome e voz assinado',
+        _template: 'basic',
         _captcha: 'false',
-        Nome: form.name,
-        CPF: form.cpf,
-        'Data de nascimento': form.birthDate,
-        'E-mail': form.email,
-        Telefone: form.phone,
-        'Aceite registrado em': acceptedAt.toLocaleString('pt-BR', {
-          dateStyle: 'short',
-          timeStyle: 'short',
-        }),
+        Mensagem: 'Segue em anexo o termo assinado (PDF).',
       };
 
       Object.entries(fields).forEach(([name, value]) => {
@@ -537,7 +530,7 @@ export default function App() {
       setLastFileName(pdf.fileName);
 
       try {
-        await sendByEmail(pdf.pdfBlob, pdf.fileName, new Date());
+        await sendByEmail(pdf.pdfBlob, pdf.fileName);
         setSubmitState('sent');
         setMessage(`Termo assinado enviado para ${recipientEmail}. Uma cópia do PDF também ficou disponível para download.`);
       } catch {
