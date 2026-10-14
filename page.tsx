@@ -33,63 +33,81 @@ const recipientEmail = 'ascom@ictdf.org.br';
 // destinatário; depois de confirmado, os termos passam a chegar normalmente.
 const formSubmitEndpoint = `https://formsubmit.co/${recipientEmail}`;
 
-const authorizationText = `AUTORIZAÇÃO DE USO DE IMAGEM, NOME E VOZ
-Instituto de Cardiologia e Transplantes do Distrito Federal - ICTDF
+const termTitle = 'TERMO DE CESSÃO DE USO DE IMAGEM, VOZ E NOME';
 
-O Instituto de Cardiologia e Transplantes do Distrito Federal - ICTDF realiza registros em fotos, vídeos e áudios para divulgar suas atividades, projetos, eventos, ações e conteúdos institucionais.
+const termIntro = [
+  'Pelo presente instrumento, a pessoa identificada abaixo, doravante denominada CEDENTE, cede ao Instituto de Cardiologia e Transplantes do Distrito Federal - ICTDF, doravante denominado CESSIONÁRIO, o direito de uso de sua imagem, voz e nome, nos termos do art. 5º, incisos V e X, da Constituição Federal, do art. 20 do Código Civil (Lei nº 10.406/2002) e da Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018), mediante as cláusulas e condições a seguir.',
+];
 
-Ao preencher e assinar este termo, você autoriza o ICTDF a utilizar sua imagem, nome e/ou voz nos termos descritos abaixo.
-
-Seus dados
-Nome completo: preenchido no formulário
-CPF: preenchido no formulário
-Data de nascimento: preenchida no formulário
-E-mail: preenchido no formulário
-Telefone: preenchido no formulário
-
-O que estou autorizando?
-Autorizo, de forma gratuita e não exclusiva, o ICTDF a utilizar minha imagem, nome e/ou voz registrados por meio de fotografias, vídeos, gravações de áudio, depoimentos, entrevistas e outros conteúdos produzidos em atividades relacionadas à instituição.
-
-Essa autorização permite que o conteúdo seja utilizado, no todo ou em parte, em materiais de comunicação e divulgação do ICTDF, incluindo:
-site e canais digitais do ICTDF;
-redes sociais, como Instagram, Facebook e YouTube;
-vídeos e materiais institucionais;
-reportagens e conteúdos destinados à imprensa;
-televisão e rádio;
-materiais impressos, campanhas, apresentações e outras peças de comunicação institucional.
-
-Condições da autorização
-1. Esta autorização é concedida de forma gratuita, portanto não haverá pagamento ou indenização pelo uso autorizado da minha imagem, nome ou voz.
-2. O ICTDF poderá editar, reproduzir, publicar, distribuir e utilizar o material produzido nos meios de comunicação previstos nesta autorização.
-3. A autorização é válida em todo o território nacional e por prazo indeterminado.
-4. Caso eu queira solicitar o encerramento desta autorização, deverei comunicar o ICTDF por escrito, com antecedência mínima de 90 dias, conforme previsto neste termo.
-5. Os materiais produzidos e publicados durante o período de vigência desta autorização poderão permanecer vinculados às ações de comunicação para as quais foram produzidos, observadas as condições deste termo.
-
-Confirmação
-Declaro que li e compreendi as informações acima e autorizo, de forma livre e gratuita, o ICTDF a utilizar minha imagem, nome e/ou voz para fins de comunicação e divulgação institucional, conforme as condições deste termo.`;
-
-const pdfTermSections = [
+const termClauses = [
   {
-    title: 'O que estou autorizando?',
+    title: 'Cláusula 1ª - Do objeto',
     body: [
-      'Autorizo, de forma gratuita e não exclusiva, o ICTDF a utilizar minha imagem, nome e/ou voz registrados por meio de fotografias, vídeos, gravações de áudio, depoimentos, entrevistas e outros conteúdos produzidos em atividades relacionadas à instituição.',
-      'Essa autorização permite que o conteúdo seja utilizado, no todo ou em parte, em materiais de comunicação e divulgação do ICTDF, incluindo: site e canais digitais do ICTDF; redes sociais, como Instagram, Facebook e YouTube; vídeos e materiais institucionais; reportagens e conteúdos destinados à imprensa; televisão e rádio; materiais impressos, campanhas, apresentações e outras peças de comunicação institucional.',
+      'O CEDENTE autoriza o ICTDF a utilizar, de forma gratuita e não exclusiva, sua imagem, voz e nome registrados por meio de fotografias, vídeos, gravações de áudio, depoimentos, entrevistas e outros conteúdos produzidos em atividades, projetos, eventos e ações relacionados à instituição.',
     ],
   },
   {
-    title: 'Condições da autorização',
+    title: 'Cláusula 2ª - Da finalidade e dos meios de divulgação',
     body: [
-      '1. Esta autorização é concedida de forma gratuita, portanto não haverá pagamento ou indenização pelo uso autorizado da minha imagem, nome ou voz.',
-      '2. O ICTDF poderá editar, reproduzir, publicar, distribuir e utilizar o material produzido nos meios de comunicação previstos nesta autorização.',
-      '3. A autorização é válida em todo o território nacional e por prazo indeterminado.',
-      '4. Caso eu queira solicitar o encerramento desta autorização, deverei comunicar o ICTDF por escrito, com antecedência mínima de 90 dias, conforme previsto neste termo.',
-      '5. Os materiais produzidos e publicados durante o período de vigência desta autorização poderão permanecer vinculados às ações de comunicação para as quais foram produzidos, observadas as condições deste termo.',
+      'O material poderá ser utilizado, no todo ou em parte, exclusivamente para fins institucionais, informativos e educativos, sem finalidade comercial, em materiais de comunicação e divulgação do ICTDF, incluindo: site e canais digitais do ICTDF; redes sociais, como Instagram, Facebook e YouTube; vídeos e materiais institucionais; reportagens e conteúdos destinados à imprensa; televisão e rádio; materiais impressos, campanhas, apresentações e outras peças de comunicação institucional.',
+    ],
+  },
+  {
+    title: 'Cláusula 3ª - Da gratuidade',
+    body: [
+      'A presente cessão é feita a título gratuito. O CEDENTE declara que nada terá a reclamar, a qualquer tempo, a título de remuneração, pagamento, direitos conexos ou indenização pelo uso autorizado de sua imagem, voz e nome, desde que observadas as condições deste termo.',
+    ],
+  },
+  {
+    title: 'Cláusula 4ª - Da edição e da preservação da honra',
+    body: [
+      'O ICTDF poderá editar, recortar, legendar, reproduzir, publicar, distribuir e utilizar o material produzido nos meios previstos neste termo, comprometendo-se a não utilizá-lo de forma que atinja a honra, a boa fama, a respeitabilidade, a intimidade ou a vida privada do CEDENTE, nem para fins comerciais, em conformidade com o art. 5º, inciso X, da Constituição Federal e com o art. 20 do Código Civil.',
+    ],
+  },
+  {
+    title: 'Cláusula 5ª - Da abrangência e do prazo',
+    body: [
+      'Esta cessão é válida em todo o território nacional, inclusive em meios digitais acessíveis a partir dele, e vigora por prazo indeterminado, a contar da data de sua assinatura.',
+    ],
+  },
+  {
+    title: 'Cláusula 6ª - Da revogação',
+    body: [
+      'O CEDENTE poderá revogar esta autorização a qualquer tempo, mediante comunicação por escrito ao ICTDF, com antecedência mínima de 90 (noventa) dias. A revogação não alcança os materiais produzidos, publicados ou distribuídos durante a vigência desta autorização, que poderão permanecer vinculados às ações de comunicação para as quais foram produzidos, não sendo o ICTDF obrigado a recolher materiais já impressos ou veiculados.',
+    ],
+  },
+  {
+    title: 'Cláusula 7ª - Da proteção de dados pessoais',
+    body: [
+      'Os dados pessoais informados neste termo, bem como a imagem e a voz do CEDENTE, serão tratados pelo ICTDF exclusivamente para as finalidades aqui descritas e para o registro desta cessão, com respeito à privacidade e à inviolabilidade da intimidade, da honra e da imagem, nos termos dos arts. 1º e 2º da Lei nº 13.709/2018 (LGPD). O CEDENTE poderá exercer os direitos de titular previstos na LGPD mediante solicitação ao ICTDF pelo e-mail ascom@ictdf.org.br.',
+    ],
+  },
+  {
+    title: 'Cláusula 8ª - Das declarações e do foro',
+    body: [
+      'O CEDENTE declara ser maior de 18 anos e civilmente capaz, ter lido e compreendido integralmente este termo e firmá-lo de forma livre e espontânea, sem qualquer vício de consentimento. Fica eleito o foro da Circunscrição Judiciária de Brasília - DF para dirimir quaisquer questões decorrentes deste termo, com renúncia a qualquer outro, por mais privilegiado que seja.',
     ],
   },
 ];
 
 const confirmationText =
-  'Declaro que li e compreendi as informações acima e autorizo, de forma livre e gratuita, o ICTDF a utilizar minha imagem, nome e/ou voz para fins de comunicação e divulgação institucional, conforme as condições deste termo.';
+  'Declaro que li e compreendi as cláusulas acima e cedo, de forma livre e gratuita, ao ICTDF o direito de uso de minha imagem, voz e nome para fins de comunicação e divulgação institucional, conforme as condições deste termo.';
+
+const authorizationText = [
+  termTitle,
+  'Instituto de Cardiologia e Transplantes do Distrito Federal - ICTDF',
+  ...termIntro,
+  [
+    'Dados do CEDENTE',
+    'Nome completo: preenchido no formulário',
+    'CPF: preenchido no formulário',
+    'Data de nascimento: preenchida no formulário',
+    'E-mail: preenchido no formulário',
+    'Telefone: preenchido no formulário',
+  ].join('\n'),
+  ...termClauses.map((clause) => [clause.title, ...clause.body].join('\n')),
+  `Confirmação\n${confirmationText}`,
+].join('\n\n');
 
 const initialForm: FormData = {
   name: '',
@@ -152,7 +170,7 @@ function buildFileName(name: string) {
     .toLowerCase();
   const date = new Date().toISOString().slice(0, 10);
 
-  return `autorizacao-uso-imagem-nome-voz-ictdf-${normalizedName || 'participante'}-${date}.pdf`;
+  return `termo-cessao-uso-imagem-voz-nome-ictdf-${normalizedName || 'participante'}-${date}.pdf`;
 }
 
 export default function Home() {
@@ -319,7 +337,7 @@ export default function Home() {
     doc.setTextColor('#173B75');
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(15);
-    doc.text('AUTORIZAÇÃO DE USO DE IMAGEM, NOME E VOZ', margin, 64);
+    doc.text(termTitle, margin, 64);
 
     doc.setTextColor('#4A5568');
     doc.setFont('helvetica', 'normal');
@@ -335,30 +353,16 @@ export default function Home() {
     doc.setTextColor('#111827');
     doc.setFont('helvetica', 'normal');
     doc.setFontSize(10);
-    let y = addPdfTextBlock(
-      doc,
-      'O Instituto de Cardiologia e Transplantes do Distrito Federal - ICTDF realiza registros em fotos, vídeos e áudios para divulgar suas atividades, projetos, eventos, ações e conteúdos institucionais.',
-      margin,
-      101,
-      contentWidth,
-      pageHeight,
-      margin,
-    );
-    y = addPdfTextBlock(
-      doc,
-      'Ao preencher e assinar este termo, você autoriza o ICTDF a utilizar sua imagem, nome e/ou voz nos termos descritos abaixo.',
-      margin,
-      y,
-      contentWidth,
-      pageHeight,
-      margin,
-    );
+    let y = 101;
+    termIntro.forEach((paragraph) => {
+      y = addPdfTextBlock(doc, paragraph, margin, y, contentWidth, pageHeight, margin);
+    });
 
     y = ensurePdfSpace(doc, y + 3, 48, margin);
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(11);
     doc.setTextColor('#173B75');
-    doc.text('Seus dados', margin, y);
+    doc.text('Dados do CEDENTE', margin, y);
     y += 8;
 
     const rows = [
@@ -381,7 +385,7 @@ export default function Home() {
     });
 
     y += 4;
-    pdfTermSections.forEach((section) => {
+    termClauses.forEach((section) => {
       y = ensurePdfSpace(doc, y, 18, margin);
       doc.setTextColor('#173B75');
       doc.setFont('helvetica', 'bold');
@@ -426,7 +430,7 @@ export default function Home() {
       doc.setTextColor('#64748B');
       doc.setFontSize(8);
       doc.text(
-        'Documento gerado digitalmente pela plataforma de autorização de uso de imagem, nome e voz do ICTDF.',
+        'Documento gerado digitalmente pela plataforma de cessão de uso de imagem, voz e nome do ICTDF.',
         margin,
         287,
       );
@@ -457,7 +461,7 @@ export default function Home() {
       formElement.style.display = 'none';
 
       const fields: Record<string, string> = {
-        _subject: `Termo de uso de imagem assinado - ${form.name}`,
+        _subject: `Termo de cessão de uso de imagem, voz e nome assinado - ${form.name}`,
         _template: 'table',
         _captcha: 'false',
         Nome: form.name,
@@ -700,7 +704,7 @@ export default function Home() {
                 htmlFor="accepted"
                 className="block cursor-pointer text-sm leading-6 text-slate-700"
               >
-                Li e concordo com o termo de uso de imagem.
+                Li e concordo com todas as cláusulas do termo de cessão de uso de imagem, voz e nome.
               </Label>
             </div>
           </div>
@@ -717,7 +721,7 @@ export default function Home() {
                   Leitura obrigatória
                 </p>
                 <h2 className="text-lg font-semibold text-slate-950">
-                  Autorização de uso de imagem, nome e voz
+                  Termo de cessão de uso de imagem, voz e nome
                 </h2>
               </div>
             </div>
