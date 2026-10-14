@@ -33,65 +33,68 @@ const recipientEmail = 'ascom@ictdf.org.br';
 // destinatário; depois de confirmado, os termos passam a chegar normalmente.
 const formSubmitEndpoint = `https://formsubmit.co/${recipientEmail}`;
 
-const termTitle = 'TERMO DE CESSÃO DE USO DE IMAGEM, VOZ E NOME';
+const termTitle = 'TERMO DE CESSÃO DE USO DE IMAGEM, NOME E VOZ';
+
+const termPurpose = 'comunicação e divulgação institucional';
 
 const termIntro = [
-  'Pelo presente instrumento, a pessoa identificada abaixo, doravante denominada CEDENTE, cede ao Instituto de Cardiologia e Transplantes do Distrito Federal - ICTDF, doravante denominado CESSIONÁRIO, o direito de uso de sua imagem, voz e nome, nos termos do art. 5º, incisos V e X, da Constituição Federal, do art. 20 do Código Civil (Lei nº 10.406/2002) e da Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018), mediante as cláusulas e condições a seguir.',
+  `Pelo presente instrumento, a pessoa identificada neste termo, doravante denominada CEDENTE, firma e celebra com o INSTITUTO DE CARDIOLOGIA E TRANSPLANTES DO DISTRITO FEDERAL - ICTDF, entidade civil, filantrópica, inscrita no CNPJ nº 92.898.550/0006-00, com sede no Setor HFA - Hospital das Forças Armadas, Sudoeste - S/Nº, Brasília/DF - CEP 70673-900, e-mail imprensa@ictdf.org.br, doravante denominado CESSIONÁRIO, o presente Termo de Cessão de Uso de Imagem, Nome e Voz para fins de ${termPurpose}, mediante as cláusulas e condições abaixo, que voluntariamente aceitam e outorgam.`,
 ];
 
 const termClauses = [
   {
     title: 'Cláusula 1ª - Do objeto',
     body: [
-      'O CEDENTE autoriza o ICTDF a utilizar, de forma gratuita e não exclusiva, sua imagem, voz e nome registrados por meio de fotografias, vídeos, gravações de áudio, depoimentos, entrevistas e outros conteúdos produzidos em atividades, projetos, eventos e ações relacionados à instituição.',
+      `Por meio do presente instrumento, o CEDENTE autoriza o CESSIONÁRIO a utilizar sua imagem, nome e/ou voz, captados por meio de fotografias, gravações de áudio e/ou filmagens de depoimentos, declarações, videoconferências, conferências web, entrevistas e/ou outras ações realizadas, para fins de ${termPurpose} nos canais de comunicação do CESSIONÁRIO.`,
     ],
   },
   {
-    title: 'Cláusula 2ª - Da finalidade e dos meios de divulgação',
+    title: 'Cláusula 2ª - Do caráter da cessão',
     body: [
-      'O material poderá ser utilizado, no todo ou em parte, exclusivamente para fins institucionais, informativos e educativos, sem finalidade comercial, em materiais de comunicação e divulgação do ICTDF, incluindo: site e canais digitais do ICTDF; redes sociais, como Instagram, Facebook e YouTube; vídeos e materiais institucionais; reportagens e conteúdos destinados à imprensa; televisão e rádio; materiais impressos, campanhas, apresentações e outras peças de comunicação institucional.',
+      'O CEDENTE declara ter ciência de que a cessão é concedida em caráter total, gratuito e não exclusivo, não havendo impedimento para que o CESSIONÁRIO utilize o material captado como desejar.',
     ],
   },
   {
-    title: 'Cláusula 3ª - Da gratuidade',
+    title: 'Cláusula 3ª - Da propriedade e do licenciamento do material',
     body: [
-      'A presente cessão é feita a título gratuito. O CEDENTE declara que nada terá a reclamar, a qualquer tempo, a título de remuneração, pagamento, direitos conexos ou indenização pelo uso autorizado de sua imagem, voz e nome, desde que observadas as condições deste termo.',
+      'O CEDENTE declara que o CESSIONÁRIO está autorizado a ser proprietário dos resultados do material produzido, com direito de utilização de forma ilimitada e por prazo indefinido, no que se refere à concessão de direitos autorais, à utilização e ao licenciamento a terceiros, para que façam uso, de qualquer forma, no todo ou em parte, desse material ou de qualquer reprodução dele.',
     ],
   },
   {
-    title: 'Cláusula 4ª - Da edição e da preservação da honra',
+    title: 'Cláusula 4ª - Da renúncia à fiscalização e aprovação',
     body: [
-      'O ICTDF poderá editar, recortar, legendar, reproduzir, publicar, distribuir e utilizar o material produzido nos meios previstos neste termo, comprometendo-se a não utilizá-lo de forma que atinja a honra, a boa fama, a respeitabilidade, a intimidade ou a vida privada do CEDENTE, nem para fins comerciais, em conformidade com o art. 5º, inciso X, da Constituição Federal e com o art. 20 do Código Civil.',
+      'O CEDENTE declara, ainda, que renuncia a qualquer direito de fiscalização ou aprovação do uso da imagem e de outras informações, bem como das utilizações delas decorrentes.',
     ],
   },
   {
-    title: 'Cláusula 5ª - Da abrangência e do prazo',
+    title: 'Cláusula 5ª - Da ausência de indenização',
     body: [
-      'Esta cessão é válida em todo o território nacional, inclusive em meios digitais acessíveis a partir dele, e vigora por prazo indeterminado, a contar da data de sua assinatura.',
+      'O CEDENTE concorda em não exigir qualquer indenização relacionada ao exercício das autorizações concedidas por meio deste instrumento.',
     ],
   },
   {
-    title: 'Cláusula 6ª - Da revogação',
+    title: 'Cláusula 6ª - Das modalidades de utilização',
     body: [
-      'O CEDENTE poderá revogar esta autorização a qualquer tempo, mediante comunicação por escrito ao ICTDF, com antecedência mínima de 90 (noventa) dias. A revogação não alcança os materiais produzidos, publicados ou distribuídos durante a vigência desta autorização, que poderão permanecer vinculados às ações de comunicação para as quais foram produzidos, não sendo o ICTDF obrigado a recolher materiais já impressos ou veiculados.',
+      'A cessão objeto deste termo abrange o direito do CESSIONÁRIO de utilizar a IMAGEM, o NOME e a VOZ do CEDENTE sob as modalidades existentes, tais como reprodução, representação, tradução e distribuição, entre outras.',
     ],
   },
   {
-    title: 'Cláusula 7ª - Da proteção de dados pessoais',
+    title: 'Cláusula 7ª - Da abrangência',
     body: [
-      'Os dados pessoais informados neste termo, bem como a imagem e a voz do CEDENTE, serão tratados pelo ICTDF exclusivamente para as finalidades aqui descritas e para o registro desta cessão, com respeito à privacidade e à inviolabilidade da intimidade, da honra e da imagem, nos termos dos arts. 1º e 2º da Lei nº 13.709/2018 (LGPD). O CEDENTE poderá exercer os direitos de titular previstos na LGPD mediante solicitação ao ICTDF pelo e-mail ascom@ictdf.org.br.',
+      'Este termo abrange o uso em todo o território nacional, em todas as suas modalidades e, em destaque, nas seguintes formas: (I) vídeo; (II) site do CESSIONÁRIO; (III) programas de televisão, rádio e reportagens para jornais e revistas; (IV) redes sociais (Facebook, YouTube, Instagram); entre outras peças de comunicação.',
     ],
   },
   {
-    title: 'Cláusula 8ª - Das declarações e do foro',
+    title: 'Cláusula 8ª - Do prazo e do foro',
     body: [
-      'O CEDENTE declara ser maior de 18 anos e civilmente capaz, ter lido e compreendido integralmente este termo e firmá-lo de forma livre e espontânea, sem qualquer vício de consentimento. Fica eleito o foro da Circunscrição Judiciária de Brasília - DF para dirimir quaisquer questões decorrentes deste termo, com renúncia a qualquer outro, por mais privilegiado que seja.',
+      'A cessão dos direitos autorais relativos à IMAGEM, ao NOME e à VOZ do CEDENTE é por prazo indeterminado, salvo se uma das partes notificar a outra, por escrito, com antecedência mínima de 90 (noventa) dias.',
+      'Fica designado o foro de Brasília/DF para dirimir quaisquer dúvidas relativas ao cumprimento deste instrumento que não possam ser superadas por mediação administrativa.',
     ],
   },
 ];
 
 const confirmationText =
-  'Declaro que li e compreendi as cláusulas acima e cedo, de forma livre e gratuita, ao ICTDF o direito de uso de minha imagem, voz e nome para fins de comunicação e divulgação institucional, conforme as condições deste termo.';
+  'Por ser esta a expressão da minha vontade, declaro que autorizo o uso acima descrito sem que nada haja a ser reclamado a título de direitos conexos à imagem, ao nome e à voz, ou a qualquer outro, e assino a presente autorização.';
 
 const authorizationText = [
   termTitle,
@@ -170,7 +173,7 @@ function buildFileName(name: string) {
     .toLowerCase();
   const date = new Date().toISOString().slice(0, 10);
 
-  return `termo-cessao-uso-imagem-voz-nome-ictdf-${normalizedName || 'participante'}-${date}.pdf`;
+  return `termo-cessao-uso-imagem-nome-voz-ictdf-${normalizedName || 'participante'}-${date}.pdf`;
 }
 
 export default function Home() {
@@ -430,7 +433,7 @@ export default function Home() {
       doc.setTextColor('#64748B');
       doc.setFontSize(8);
       doc.text(
-        'Documento gerado digitalmente pela plataforma de cessão de uso de imagem, voz e nome do ICTDF.',
+        'Documento gerado digitalmente pela plataforma de cessão de uso de imagem, nome e voz do ICTDF.',
         margin,
         287,
       );
@@ -461,7 +464,7 @@ export default function Home() {
       formElement.style.display = 'none';
 
       const fields: Record<string, string> = {
-        _subject: `Termo de cessão de uso de imagem, voz e nome assinado - ${form.name}`,
+        _subject: `Termo de cessão de uso de imagem, nome e voz assinado - ${form.name}`,
         _template: 'table',
         _captcha: 'false',
         Nome: form.name,
@@ -704,7 +707,7 @@ export default function Home() {
                 htmlFor="accepted"
                 className="block cursor-pointer text-sm leading-6 text-slate-700"
               >
-                Li e concordo com todas as cláusulas do termo de cessão de uso de imagem, voz e nome.
+                Li e concordo com todas as cláusulas do termo de cessão de uso de imagem, nome e voz.
               </Label>
             </div>
           </div>
@@ -721,7 +724,7 @@ export default function Home() {
                   Leitura obrigatória
                 </p>
                 <h2 className="text-lg font-semibold text-slate-950">
-                  Termo de cessão de uso de imagem, voz e nome
+                  Termo de cessão de uso de imagem, nome e voz
                 </h2>
               </div>
             </div>
