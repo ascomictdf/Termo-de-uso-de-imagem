@@ -29,6 +29,9 @@ type FormData = {
 type SubmitState = 'idle' | 'sending' | 'sent' | 'downloaded' | 'error';
 
 const recipientEmail = 'ascom@ictdf.org.br';
+// Na primeira submissão o FormSubmit envia um e-mail de ativação para o
+// destinatário; depois de confirmado, os termos passam a chegar normalmente.
+const formSubmitEndpoint = `https://formsubmit.co/${recipientEmail}`;
 
 const authorizationText = `AUTORIZAÇÃO DE USO DE IMAGEM, NOME E VOZ
 Instituto de Cardiologia e Transplantes do Distrito Federal - ICTDF
@@ -138,10 +141,6 @@ async function imageToDataUrl(src: string) {
     reader.onerror = reject;
     reader.readAsDataURL(blob);
   });
-}
-
-function dataUrlToBase64(dataUrl: string) {
-  return dataUrl.split(',')[1] ?? '';
 }
 
 function buildFileName(name: string) {
@@ -435,8 +434,77 @@ export default function Home() {
     }
 
     const pdfDataUrl = doc.output('datauristring');
+    const pdfBlob = doc.output('blob');
     const fileName = buildFileName(form.name);
-    return { fileName, pdfDataUrl, pdfBase64: dataUrlToBase64(pdfDataUrl) };
+    return { fileName, pdfDataUrl, pdfBlob };
+  }
+
+  // Envia o PDF como anexo pelo FormSubmit. O upload de arquivos exige um
+  // formulário multipart real, então o envio é feito para um iframe oculto
+  // para que a página não seja redirecionada.
+  function sendByEmail(pdfBlob: Blob, fileName: string, acceptedAt: Date) {
+    return new Promise<void>((resolve, reject) => {
+      const frameName = `formsubmit-${Date.now()}`;
+      const iframe = document.createElement('iframe');
+      iframe.name = frameName;
+      iframe.style.display = 'none';
+
+      const formElement = document.createElement('form');
+      formElement.action = formSubmitEndpoint;
+      formElement.method = 'POST';
+      formElement.enctype = 'multipart/form-data';
+      formElement.target = frameName;
+      formElement.style.display = 'none';
+
+      const fields: Record<string, string> = {
+        _subject: `Termo de uso de imagem assinado - ${form.name}`,
+        _template: 'table',
+        _captcha: 'false',
+        Nome: form.name,
+        CPF: form.cpf,
+        'Data de nascimento': form.birthDate,
+        'E-mail': form.email,
+        Telefone: form.phone,
+        'Aceite registrado em': acceptedAt.toLocaleString('pt-BR', {
+          dateStyle: 'short',
+          timeStyle: 'short',
+        }),
+      };
+
+      Object.entries(fields).forEach(([name, value]) => {
+        const input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = name;
+        input.value = value;
+        formElement.appendChild(input);
+      });
+
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.name = 'attachment';
+      const transfer = new DataTransfer();
+      transfer.items.add(new File([pdfBlob], fileName, { type: 'application/pdf' }));
+      fileInput.files = transfer.files;
+      formElement.appendChild(fileInput);
+
+      const cleanup = () => {
+        window.clearTimeout(timeout);
+        formElement.remove();
+        window.setTimeout(() => iframe.remove(), 1000);
+      };
+      const timeout = window.setTimeout(() => {
+        cleanup();
+        reject(new Error('timeout'));
+      }, 30000);
+      iframe.addEventListener('load', () => {
+        cleanup();
+        resolve();
+      });
+
+      document.body.appendChild(iframe);
+      document.body.appendChild(formElement);
+      formElement.submit();
+    });
   }
 
   function downloadPdf(pdfDataUrl: string, fileName: string) {
@@ -463,33 +531,17 @@ export default function Home() {
       setLastPdfUrl(pdf.pdfDataUrl);
       setLastFileName(pdf.fileName);
 
-      const response = await fetch('/api/send-consent', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          fileName: pdf.fileName,
-          pdfBase64: pdf.pdfBase64,
-          participant: form,
-          acceptedAt: new Date().toISOString(),
-        }),
-      });
-      const result = (await response.json()) as {
-        sent?: boolean;
-        message?: string;
-      };
-
-      if (response.ok && result.sent) {
+      try {
+        await sendByEmail(pdf.pdfBlob, pdf.fileName, new Date());
         setSubmitState('sent');
-        setMessage(`Termo enviado para ${recipientEmail}. Uma cópia do PDF também ficou disponível para download.`);
-        return;
+        setMessage(`Termo assinado enviado para ${recipientEmail}. Uma cópia do PDF também ficou disponível para download.`);
+      } catch {
+        downloadPdf(pdf.pdfDataUrl, pdf.fileName);
+        setSubmitState('downloaded');
+        setMessage(
+          `Não foi possível enviar o termo por e-mail. O PDF foi baixado; envie-o manualmente para ${recipientEmail}.`,
+        );
       }
-
-      downloadPdf(pdf.pdfDataUrl, pdf.fileName);
-      setSubmitState('downloaded');
-      setMessage(
-        result.message ??
-          'PDF gerado. O envio automático ainda precisa ser configurado no servidor; o arquivo foi baixado para envio manual.',
-      );
     } catch {
       setSubmitState('error');
       setMessage('Não foi possível concluir a geração do termo. Revise os dados e tente novamente.');
