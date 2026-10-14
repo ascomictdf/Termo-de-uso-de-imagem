@@ -461,12 +461,15 @@ export default function App() {
       formElement.target = frameName;
       formElement.style.display = 'none';
 
-      // Envia apenas o PDF assinado; os dados do participante já constam nele.
+      // Envia o PDF assinado e apenas o nome de quem assinou; os demais
+      // dados do participante já constam no PDF.
+      const signerName = form.name.trim();
       const fields: Record<string, string> = {
-        _subject: 'Termo de cessão de uso de imagem, nome e voz assinado',
+        _subject: `Termo de cessão de uso de imagem, nome e voz assinado - ${signerName}`,
         _template: 'basic',
         _captcha: 'false',
-        Mensagem: 'Segue em anexo o termo assinado (PDF).',
+        'Nome completo': signerName,
+        Mensagem: `Segue em anexo o termo assinado por ${signerName} (PDF).`,
       };
 
       Object.entries(fields).forEach(([name, value]) => {
