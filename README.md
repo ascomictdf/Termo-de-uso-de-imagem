@@ -11,24 +11,30 @@ Se o envio falhar, o PDF é baixado no aparelho da pessoa para envio manual.
 
 1. Importe o repositório na Vercel (Add New → Project) e clique em Deploy.
    As configurações de build estão em `vercel.json`.
-2. Em Project → Settings → Environment Variables, cadastre:
+2. Configure o envio de e-mail em Project → Settings → Environment Variables
+   (uma das opções abaixo) e faça um novo deploy (Deployments → Redeploy).
 
-   | Variável    | Exemplo                       | Obrigatória |
-   | ----------- | ----------------------------- | ----------- |
-   | `SMTP_HOST` | `smtp.gmail.com`              | sim         |
-   | `SMTP_PORT` | `465`                         | não (465)   |
-   | `SMTP_USER` | `ascom@ictdf.org.br`          | sim         |
-   | `SMTP_PASS` | senha de aplicativo da conta  | sim         |
-   | `EMAIL_FROM`| `Termos ICTDF <ascom@ictdf.org.br>` | não (usa `SMTP_USER`) |
-   | `EMAIL_TO`  | `ascom@ictdf.org.br`          | não (ascom@ictdf.org.br) |
+### Opção simples: Resend (recomendada)
 
-3. Faça um novo deploy (Deployments → Redeploy) para as variáveis valerem.
+1. Crie uma conta gratuita em resend.com usando o e-mail **ascom@ictdf.org.br**.
+2. Em API Keys, crie uma chave (permissão "Sending access").
+3. Na Vercel, cadastre a variável `RESEND_API_KEY` com essa chave.
 
-Servidores SMTP comuns:
+Sem domínio verificado, o Resend envia pelo remetente `onboarding@resend.dev`
+e somente para o e-mail com que a conta foi criada. Para enviar com remetente
+`@ictdf.org.br`, verifique o domínio no Resend e defina `EMAIL_FROM`.
 
-- Google Workspace / Gmail: `smtp.gmail.com`, porta `465`, com senha de app.
-- Microsoft 365 / Outlook: `smtp.office365.com`, porta `587`.
-- Resend: `smtp.resend.com`, porta `465`, usuário `resend`, senha = API key.
+### Opção alternativa: servidor SMTP próprio
+
+| Variável    | Exemplo (Microsoft 365)       |
+| ----------- | ----------------------------- |
+| `SMTP_HOST` | `smtp.office365.com`          |
+| `SMTP_PORT` | `587`                         |
+| `SMTP_USER` | `ascom@ictdf.org.br`          |
+| `SMTP_PASS` | senha de aplicativo da conta  |
+
+Opcionais para as duas opções: `EMAIL_FROM` (remetente) e `EMAIL_TO`
+(destinatário, padrão ascom@ictdf.org.br).
 
 ## Rodar localmente
 
