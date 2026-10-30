@@ -27,9 +27,6 @@ type FormData = {
 type SubmitState = 'idle' | 'sending' | 'sent' | 'downloaded' | 'error';
 
 const recipientEmail = 'ascom@ictdf.org.br';
-// Na primeira submissão o FormSubmit envia um e-mail de ativação para o
-// destinatário; depois de confirmado, os termos passam a chegar normalmente.
-const formSubmitEndpoint = `https://formsubmit.co/${recipientEmail}`;
 
 const termTitle = 'TERMO DE CESSÃO DE USO DE IMAGEM, NOME E VOZ';
 
@@ -160,6 +157,10 @@ async function imageToDataUrl(src: string) {
     reader.onerror = reject;
     reader.readAsDataURL(blob);
   });
+}
+
+function dataUrlToBase64(dataUrl: string) {
+  return dataUrl.split(',')[1] ?? '';
 }
 
 function buildFileName(name: string) {
@@ -439,73 +440,22 @@ export default function App() {
     }
 
     const pdfDataUrl = doc.output('datauristring');
-    const pdfBlob = doc.output('blob');
     const fileName = buildFileName(form.name);
-    return { fileName, pdfDataUrl, pdfBlob };
+    return { fileName, pdfDataUrl, pdfBase64: dataUrlToBase64(pdfDataUrl) };
   }
 
-  // Envia o PDF como anexo pelo FormSubmit. O upload de arquivos exige um
-  // formulário multipart real, então o envio é feito para um iframe oculto
-  // para que a página não seja redirecionada.
-  function sendByEmail(pdfBlob: Blob, fileName: string) {
-    return new Promise<void>((resolve, reject) => {
-      const frameName = `formsubmit-${Date.now()}`;
-      const iframe = document.createElement('iframe');
-      iframe.name = frameName;
-      iframe.style.display = 'none';
-
-      const formElement = document.createElement('form');
-      formElement.action = formSubmitEndpoint;
-      formElement.method = 'POST';
-      formElement.enctype = 'multipart/form-data';
-      formElement.target = frameName;
-      formElement.style.display = 'none';
-
-      // Envia o PDF assinado e apenas o nome de quem assinou; os demais
-      // dados do participante já constam no PDF.
-      const signerName = form.name.trim();
-      const fields: Record<string, string> = {
-        _subject: `Termo de cessão de uso de imagem, nome e voz assinado - ${signerName}`,
-        _template: 'basic',
-        _captcha: 'false',
-        'Nome completo': signerName,
-        Mensagem: `Segue em anexo o termo assinado por ${signerName} (PDF).`,
-      };
-
-      Object.entries(fields).forEach(([name, value]) => {
-        const input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = name;
-        input.value = value;
-        formElement.appendChild(input);
-      });
-
-      const fileInput = document.createElement('input');
-      fileInput.type = 'file';
-      fileInput.name = 'attachment';
-      const transfer = new DataTransfer();
-      transfer.items.add(new File([pdfBlob], fileName, { type: 'application/pdf' }));
-      fileInput.files = transfer.files;
-      formElement.appendChild(fileInput);
-
-      const cleanup = () => {
-        window.clearTimeout(timeout);
-        formElement.remove();
-        window.setTimeout(() => iframe.remove(), 1000);
-      };
-      const timeout = window.setTimeout(() => {
-        cleanup();
-        reject(new Error('timeout'));
-      }, 30000);
-      iframe.addEventListener('load', () => {
-        cleanup();
-        resolve();
-      });
-
-      document.body.appendChild(iframe);
-      document.body.appendChild(formElement);
-      formElement.submit();
+  // Envia o PDF assinado para a função da Vercel, que o encaminha por
+  // e-mail para a ASCOM.
+  async function sendByEmail(pdfBase64: string, fileName: string) {
+    const response = await fetch('/api/send-consent', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: form.name.trim(), fileName, pdfBase64 }),
     });
+    const result = (await response.json().catch(() => ({}))) as { sent?: boolean };
+    if (!response.ok || !result.sent) {
+      throw new Error('send-failed');
+    }
   }
 
   function downloadPdf(pdfDataUrl: string, fileName: string) {
@@ -533,7 +483,7 @@ export default function App() {
       setLastFileName(pdf.fileName);
 
       try {
-        await sendByEmail(pdf.pdfBlob, pdf.fileName);
+        await sendByEmail(pdf.pdfBase64, pdf.fileName);
         setSubmitState('sent');
         setMessage(`Termo assinado enviado para ${recipientEmail}. Uma cópia do PDF também ficou disponível para download.`);
       } catch {
